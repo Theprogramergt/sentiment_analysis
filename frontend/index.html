@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#070b16" />
+    <meta
+      name="description"
+      content="Compare two movie sentiment models trained on different dataset sizes."
+    />
+    <title>Movie Sentiment AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="page-glow page-glow-top" aria-hidden="true"></div>
+    <div class="page-glow page-glow-bottom" aria-hidden="true"></div>
+
+    <header class="topbar shell">
+      <a class="brand" href="#" aria-label="Movie Sentiment AI home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M5 4.75h14v14.5H5z" stroke="currentColor" stroke-width="1.7" />
+            <path d="m8 4.75 2 14.5M14 4.75l2 14.5M5 9.5h14M5 14.5h14" stroke="currentColor" stroke-width="1.35" />
+          </svg>
+        </span>
+        <span>Movie Sentiment <b>AI</b></span>
+      </a>
+
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a class="active" href="#overview">Overview</a>
+        <a href="#models">Models</a>
+        <a href="#analyzer">Analyzer</a>
+      </nav>
+
+      <div class="connection-pill" id="connection-status" role="status">
+        <span class="status-dot" aria-hidden="true"></span>
+        <span class="connection-label">Checking API</span>
+      </div>
+    </header>
+
+    <main id="overview" class="shell">
+      <section class="hero">
+        <div class="eyebrow"><span class="eyebrow-line"></span> MODEL INTELLIGENCE / 01</div>
+        <h1>Understand movies<br /><span>through AI.</span></h1>
+        <p class="hero-copy">
+          Explore how training data shapes the way models read a story.
+          Compare two perspectives on any movie review in milliseconds.
+        </p>
+        <div class="badge-row" aria-label="Project capabilities">
+          <span class="badge"><span class="badge-icon">◎</span> IMDb dataset</span>
+          <span class="badge"><span class="badge-icon">✦</span> Machine learning</span>
+          <span class="badge"><span class="badge-icon">⇄</span> Model comparison</span>
+        </div>
+      </section>
+
+      <section id="models" class="section-block">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">THE TWO PERSPECTIVES</p>
+            <h2>More data. More context.</h2>
+          </div>
+          <p class="section-note">Same architecture, different exposure.</p>
+        </div>
+
+        <div class="model-grid">
+          <article class="model-card model-a">
+            <div class="card-topline">
+              <span class="model-label"><span class="model-dot"></span> MODEL A</span>
+              <span class="model-chip">Focused</span>
+            </div>
+            <div class="model-stat"><strong>20<span>%</span></strong><span>of training data</span></div>
+            <div class="meter" aria-label="20 percent of training data"><span style="width: 20%"></span></div>
+            <div class="card-bottomline"><span>5,000</span><span>training samples</span></div>
+            <p>Lean and focused, Model A learns from a compact slice of the IMDb dataset.</p>
+          </article>
+
+          <article class="model-card model-b">
+            <div class="card-topline">
+              <span class="model-label"><span class="model-dot"></span> MODEL B</span>
+              <span class="model-chip">Expanded</span>
+            </div>
+            <div class="model-stat"><strong>100<span>%</span></strong><span>of training data</span></div>
+            <div class="meter" aria-label="100 percent of training data"><span style="width: 100%"></span></div>
+            <div class="card-bottomline"><span>25,000</span><span>training samples</span></div>
+            <p>More examples, more nuance. Model B sees the complete training dataset.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="analyzer" class="analyzer-section">
+        <div class="section-heading analyzer-heading">
+          <div>
+            <p class="section-kicker">LIVE ANALYSIS</p>
+            <h2>Put a review to the test.</h2>
+          </div>
+          <p class="section-note">Powered by your local inference API</p>
+        </div>
+
+        <div class="analyzer-card">
+          <div class="input-header">
+            <label for="review-input">Your movie review</label>
+            <span id="char-count">0 / 2,000</span>
+          </div>
+          <textarea
+            id="review-input"
+            maxlength="2000"
+            placeholder="Write or paste a movie review here..."
+            aria-describedby="input-help"
+          ></textarea>
+          <div class="input-footer">
+            <div class="examples" id="input-help">
+              <span>Try an example</span>
+              <button type="button" class="example-btn" data-review="A beautifully acted film with a thoughtful story and an ending that stayed with me.">Positive review</button>
+              <button type="button" class="example-btn" data-review="The plot was predictable, the pacing dragged, and the characters felt completely forgettable.">Negative review</button>
+            </div>
+            <button type="button" class="analyze-btn" id="analyze-btn">
+              <span class="button-label">Analyze review</span>
+              <span class="button-icon" aria-hidden="true">→</span>
+            </button>
+          </div>
+          <p class="error-message" id="error-message" role="alert" hidden></p>
+        </div>
+      </section>
+
+      <section class="results-section" id="results" aria-live="polite">
+        <div class="results-empty" id="results-empty">
+          <span class="empty-icon" aria-hidden="true">✦</span>
+          <div>
+            <h3>Your comparison will appear here</h3>
+            <p>Submit a review to see how both models interpret it.</p>
+          </div>
+        </div>
+
+        <div class="results-content" id="results-content" hidden>
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">ANALYSIS COMPLETE</p>
+              <h2>Two reads, one review.</h2>
+            </div>
+            <div class="agreement-badge" id="agreement-badge"></div>
+          </div>
+          <div class="result-grid">
+            <article class="result-card" id="result-a">
+              <div class="result-card-header"><span>MODEL A</span><span class="result-sample">5K samples</span></div>
+              <div class="sentiment-row"><span class="sentiment-icon" aria-hidden="true"></span><strong class="sentiment-value"></strong></div>
+              <div class="result-latency"><span>Inference latency</span><strong class="latency-value"></strong></div>
+            </article>
+            <article class="result-card" id="result-b">
+              <div class="result-card-header"><span>MODEL B</span><span class="result-sample">25K samples</span></div>
+              <div class="sentiment-row"><span class="sentiment-icon" aria-hidden="true"></span><strong class="sentiment-value"></strong></div>
+              <div class="result-latency"><span>Inference latency</span><strong class="latency-value"></strong></div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="shell footer">
+      <span>Movie Sentiment AI</span>
+      <span>Built for clearer model comparison</span>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>

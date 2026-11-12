@@ -2,7 +2,10 @@
 import time
 import joblib
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Request
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, Field
 
 app = FastAPI(
@@ -14,6 +17,9 @@ app = FastAPI(
 # Load both trained models
 model_a = joblib.load("models/model_a.joblib")
 model_b = joblib.load("models/model_b.joblib")
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
+templates = Jinja2Templates(directory="templates")
 
 
 class ReviewRequest(BaseModel):
@@ -33,11 +39,13 @@ def predict(model, review):
     }
 
 
-@app.get("/")
-def home():
-    return {
-        "message": "Movie Sentiment Analysis API is running!"
-    }
+@app.get("/", response_class=HTMLResponse)
+def home(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={"title": "Movie Sentiment AI"},
+    )
 
 
 @app.get("/health")

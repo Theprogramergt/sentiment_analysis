@@ -1,25 +1,30 @@
 
-from app import home, health, compare
-from app import ReviewRequest
+from fastapi.testclient import TestClient
+from app import app
+
+client = TestClient(app)
 
 
 def test_home():
-    result = home()
-    assert "running" in result["message"]
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "text/html" in response.headers["content-type"]
 
 
 def test_health():
-    result = health()
-    assert result["status"] == "healthy"
+    response = client.get("/health")
+    assert response.status_code == 200
+    assert response.json()["status"] == "healthy"
 
 
 def test_compare():
-    request = ReviewRequest(
-        review="This movie was amazing and wonderful!"
+    response = client.post(
+        "/compare",
+        json={"review": "This movie was amazing and wonderful!"}
     )
+    assert response.status_code == 200
 
-    result = compare(request)
-
+    result = response.json()
     assert result["model_a"]["sentiment"] in ["positive", "negative"]
     assert result["model_b"]["sentiment"] in ["positive", "negative"]
     assert "same_prediction" in result
