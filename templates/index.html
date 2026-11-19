@@ -35,6 +35,7 @@
       <nav class="nav-links" aria-label="Primary navigation">
         <a class="active" href="#overview">Overview</a>
         <a href="#models">Models</a>
+        <a href="#ab-testing">A/B Testing</a>
         <a href="#analyzer">Analyzer</a>
       </nav>
 
@@ -89,6 +90,114 @@
             <div class="meter" aria-label="100 percent of training data"><span style="width: 100%"></span></div>
             <div class="card-bottomline"><span>25,000</span><span>training samples</span></div>
             <p>More examples, more nuance. Model B sees the complete training dataset.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="ab-testing" class="ab-section">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">CONTROLLED EXPERIMENT</p>
+            <h2>A/B Testing</h2>
+          </div>
+          <p class="section-note" id="ab-dataset-note">Loading held-out IMDb reviews...</p>
+        </div>
+
+        <div class="ab-launch-card">
+          <div class="ab-launch-copy">
+            <span class="ab-live-label"><span></span> LIVE EXPERIMENT</span>
+            <h3>Measure both models on the same held-out source.</h3>
+            <p>Reviews are distributed once using a reproducible 50/50 split. Actual IMDb labels are used for accuracy.</p>
+          </div>
+          <button type="button" class="start-ab-btn" id="start-ab-btn">
+            <span class="button-label">Start A/B Test</span>
+            <span class="button-icon" aria-hidden="true">→</span>
+          </button>
+        </div>
+        <p class="error-message" id="ab-error-message" role="alert" hidden></p>
+
+        <div class="ab-results" id="ab-results" hidden>
+          <section class="traffic-card" aria-labelledby="traffic-title">
+            <div class="traffic-heading">
+              <div>
+                <p class="section-kicker">AUTOMATIC DISTRIBUTION</p>
+                <h3 id="traffic-title">Live Traffic Distribution</h3>
+              </div>
+              <div class="traffic-total"><span>Total reviews assigned</span><strong id="traffic-total">0</strong></div>
+            </div>
+            <div class="traffic-bar" aria-label="50/50 model traffic distribution">
+              <span class="traffic-bar-a" id="traffic-bar-a"></span>
+              <span class="traffic-bar-b" id="traffic-bar-b"></span>
+            </div>
+            <div class="traffic-models">
+              <div class="traffic-model traffic-model-a">
+                <span><span class="traffic-dot"></span> Model A</span>
+                <strong><b id="traffic-a-count">0</b> reviews <em id="traffic-a-percent">0%</em></strong>
+              </div>
+              <div class="traffic-model traffic-model-b">
+                <span><span class="traffic-dot"></span> Model B</span>
+                <strong><b id="traffic-b-count">0</b> reviews <em id="traffic-b-percent">0%</em></strong>
+              </div>
+            </div>
+          </section>
+
+          <section class="assignment-card" aria-labelledby="assignments-title">
+            <div class="assignment-heading">
+              <p class="section-kicker">REAL EXPERIMENT DATA</p>
+              <h3 id="assignments-title">Sample Review Assignments</h3>
+            </div>
+            <div class="assignment-table-wrap">
+              <table class="assignment-table">
+                <thead>
+                  <tr>
+                    <th>Review ID</th>
+                    <th>Review preview</th>
+                    <th>Assigned model</th>
+                    <th>Actual sentiment</th>
+                  </tr>
+                </thead>
+                <tbody id="assignment-table-body"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <div class="ab-metric-grid">
+            <article class="ab-model-card ab-model-a">
+              <div class="ab-card-heading">
+                <span><span class="model-dot"></span> MODEL A</span>
+                <span class="ab-card-status">Experimented</span>
+              </div>
+              <div class="ab-accuracy"><strong id="ab-a-accuracy">0%</strong><span>accuracy</span></div>
+              <div class="ab-metric-row"><span>Reviews processed</span><strong id="ab-a-processed">0</strong></div>
+              <div class="ab-metric-row"><span>Correct predictions</span><strong id="ab-a-correct">0</strong></div>
+              <div class="ab-metric-row"><span>Average inference</span><strong id="ab-a-average">0 ms</strong></div>
+              <div class="ab-metric-row"><span>Total inference</span><strong id="ab-a-total">0 ms</strong></div>
+            </article>
+
+            <article class="ab-model-card ab-model-b">
+              <div class="ab-card-heading">
+                <span><span class="model-dot"></span> MODEL B</span>
+                <span class="ab-card-status">Experimented</span>
+              </div>
+              <div class="ab-accuracy"><strong id="ab-b-accuracy">0%</strong><span>accuracy</span></div>
+              <div class="ab-metric-row"><span>Reviews processed</span><strong id="ab-b-processed">0</strong></div>
+              <div class="ab-metric-row"><span>Correct predictions</span><strong id="ab-b-correct">0</strong></div>
+              <div class="ab-metric-row"><span>Average inference</span><strong id="ab-b-average">0 ms</strong></div>
+              <div class="ab-metric-row"><span>Total inference</span><strong id="ab-b-total">0 ms</strong></div>
+            </article>
+          </div>
+
+          <article class="ab-significance-card">
+            <div>
+              <p class="section-kicker">STATISTICAL SIGNIFICANCE</p>
+              <h3 id="ab-conclusion">No statistically significant difference.</h3>
+              <p id="ab-recommendation" class="ab-recommendation"></p>
+            </div>
+            <div class="ab-stat-grid">
+              <div><span>Z-statistic</span><strong id="ab-z">0.0000</strong></div>
+              <div><span>P-value</span><strong id="ab-p">1.000000</strong></div>
+              <div><span>Threshold</span><strong id="ab-threshold">±1.96</strong></div>
+            </div>
           </article>
         </div>
       </section>
@@ -150,11 +259,13 @@
               <div class="result-card-header"><span>MODEL A</span><span class="result-sample">5K samples</span></div>
               <div class="sentiment-row"><span class="sentiment-icon" aria-hidden="true"></span><strong class="sentiment-value"></strong></div>
               <div class="result-latency"><span>Inference latency</span><strong class="latency-value"></strong></div>
+              <div class="result-accuracy"><span>Benchmark accuracy</span><strong class="accuracy-value"></strong></div>
             </article>
             <article class="result-card" id="result-b">
               <div class="result-card-header"><span>MODEL B</span><span class="result-sample">25K samples</span></div>
               <div class="sentiment-row"><span class="sentiment-icon" aria-hidden="true"></span><strong class="sentiment-value"></strong></div>
               <div class="result-latency"><span>Inference latency</span><strong class="latency-value"></strong></div>
+              <div class="result-accuracy"><span>Benchmark accuracy</span><strong class="accuracy-value"></strong></div>
             </article>
           </div>
         </div>

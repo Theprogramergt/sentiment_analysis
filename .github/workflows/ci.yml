@@ -28,5 +28,8 @@ jobs:
       - name: Run tests
         run: python -m pytest -v
 
-      - name: Build Docker image
-        run: docker build -t movie-sentiment-api .
+      - name: Validate Docker Compose
+        run: docker compose config
+
+      - name: Build Docker images
+        run: docker compose build

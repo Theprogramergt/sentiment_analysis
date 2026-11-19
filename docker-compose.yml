@@ -1,0 +1,78 @@
+services:
+  model-a-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.model-a
+    environment:
+      MODEL_PATH: /app/model.joblib
+    expose:
+      - "8001"
+    networks:
+      - movie-mlops
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8001/health', timeout=3)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  model-b-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.model-b
+    environment:
+      MODEL_PATH: /app/model.joblib
+    expose:
+      - "8002"
+    networks:
+      - movie-mlops
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8002/health', timeout=3)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  main-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      MODEL_A_URL: http://model-a-service:8001
+      MODEL_B_URL: http://model-b-service:8002
+    ports:
+      - "8000:8000"
+    networks:
+      - movie-mlops
+    depends_on:
+      model-a-service:
+        condition: service_healthy
+      model-b-service:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3)",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  movie-mlops:
